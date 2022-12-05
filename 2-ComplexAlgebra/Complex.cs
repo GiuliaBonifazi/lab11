@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace ComplexAlgebra
 {
     /// <summary>
@@ -17,6 +20,70 @@ namespace ComplexAlgebra
     /// TODO:     - e.g. via the Equals(object) method
     public class Complex
     {
-        // TODO: fill this class\
+        public Complex (double re, double im) 
+        {
+            Real = re;
+            Imaginary = im;
+        }
+
+        public double Real {get; }
+
+        public double Imaginary {get; }
+
+        public double Modulus 
+        {
+            get => Math.Sqrt(Real * Real + Imaginary * Imaginary);
+        } 
+
+        public double Phase 
+        {
+            get => Math.Atan2(Imaginary , Real);
+        }
+
+        public Complex Complement 
+        {
+            get => new Complex( Real, - Imaginary);
+        } 
+        public Complex Plus(Complex other) => new Complex(Real + other.Real, Imaginary + other.Imaginary);
+
+        public Complex Minus(Complex other) => new Complex(Real - other.Real, Imaginary - other.Imaginary);
+
+        public override string ToString() 
+        {
+            string ImString;
+            if(Math.Abs(Imaginary) == 1) 
+            {
+                ImString = "i";
+            } else
+            {
+                ImString = (Imaginary == 0 ) ? Imaginary.ToString() : "i" + Math.Abs(Imaginary);
+            }
+
+            
+            if(Real == 0) 
+            {
+                return (Imaginary >= 0) ? ImString : " - " + ImString;
+            }
+            else if (Imaginary == 0) 
+            {
+                return Real.ToString();
+            }
+            else
+            {
+                return (Imaginary > 0) ? Real + " + " + ImString : Real + " - " + ImString;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Complex complex &&
+                   Real == complex.Real &&
+                   Imaginary == complex.Imaginary;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Real, Imaginary, Real, Imaginary, Modulus, Phase, Complement);
+        }
     }
 }
